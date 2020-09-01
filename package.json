@@ -2,7 +2,7 @@
   "name": "goit-react-hw-06-phonebook-redux",
   "version": "0.1.0",
   "private": true,
-  "homepage": "git@github.com:kovgreen/goit-react-hw-06-phonebook-redux.git",
+  "homepage": "https://kovgreen.github.io/goit-react-hw-06-phonebook-redux",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -11,9 +11,11 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
     "react-scripts": "^3.4.3",
     "react-toastify": "^6.0.5",
     "react-transition-group": "^4.4.1",
+    "redux": "^4.0.5",
     "uuidv4": "^6.1.0"
   },
   "scripts": {
@@ -38,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.8"
   }
 }

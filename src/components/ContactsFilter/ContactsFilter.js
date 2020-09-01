@@ -1,13 +1,17 @@
 import React from "react";
 import { CSSTransition } from "react-transition-group";
-import PropTypes from "prop-types";
 import styles from "./ContactsFilter.module.css";
 import slideIn from "../../utils/transitions/slide.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { filterContacts } from "../../redux/actions/filter";
 
-const ContactsFilter = ({ contactList, setQuery }) => {
+const ContactsFilter = () => {
+  const contactList = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
+
   const inputChangeHandler = e => {
     const { value } = e.target;
-    setQuery(value);
+    dispatch(filterContacts(value));
   };
 
   return (
@@ -28,20 +32,6 @@ const ContactsFilter = ({ contactList, setQuery }) => {
       </CSSTransition>
     </div>
   );
-};
-
-ContactsFilter.propTypes = {
-  contactList: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired
-      })
-    ),
-    PropTypes.array
-  ]).isRequired,
-  setQuery: PropTypes.func.isRequired
 };
 
 export default ContactsFilter;

@@ -1,35 +1,34 @@
 import React, { useEffect } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import PropTypes from "prop-types";
 import popIn from "../../utils/transitions/pop.module.css";
 import slideIn from "../../utils/transitions/slide.module.css";
 import styles from "./ContactList.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteContact, uploadContactList } from "../../redux/actions/contacts";
+import { get, save } from "../../utils/storage";
 
-const ContactList = ({
-  contactList,
-  setContactList,
-  query,
-  saveToStorage,
-  getFromStorage,
-}) => {
-  const onDelete = (id) => {
-    const updatedList = contactList.filter((contact) => contact.id !== id);
-    setContactList([...updatedList]);
+const ContactList = () => {
+  const dispatch = useDispatch();
+  const contactList = useSelector(state => state.contacts);
+  const filter = useSelector(state => state.filter);
+
+  const onDelete = id => {
+    dispatch(deleteContact(id));
   };
 
   const filteredList = contactList.filter(
-    (contact) =>
-      contact.name.toLowerCase().includes(query.toLowerCase().trim()) ||
-      contact.number.includes(query.trim())
+    contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase().trim()) ||
+      contact.number.includes(filter.trim())
   );
 
   useEffect(() => {
-    setContactList(getFromStorage("contacts"));
-  }, [setContactList, getFromStorage]);
+    dispatch(uploadContactList(get("contacts")));
+  }, [dispatch]);
 
   useEffect(() => {
-    saveToStorage("contacts", contactList);
-  }, [contactList, saveToStorage]);
+    save("contacts", contactList);
+  }, [contactList]);
 
   return (
     <>
@@ -44,7 +43,7 @@ const ContactList = ({
       </CSSTransition>
 
       <TransitionGroup component="ul" className={styles.contactList}>
-        {filteredList.map((contact) => (
+        {filteredList.map(contact => (
           <CSSTransition key={contact.id} classNames={popIn} timeout={250}>
             <li className={styles.contactListItem}>
               <span className={styles.name}>{contact.name}</span>
@@ -58,23 +57,6 @@ const ContactList = ({
       </TransitionGroup>
     </>
   );
-};
-
-ContactList.propTypes = {
-  contactList: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-      })
-    ),
-    PropTypes.array,
-  ]).isRequired,
-  setContactList: PropTypes.func.isRequired,
-  saveToStorage: PropTypes.func.isRequired,
-  getFromStorage: PropTypes.func.isRequired,
-  query: PropTypes.string,
 };
 
 export default ContactList;
